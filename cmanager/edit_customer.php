@@ -1,6 +1,7 @@
 <?php 
     include('includes/database.php');
-    $id = $_GET['id'];
+    $db->begintransaction();
+    $id = filter_input(INPUT_GET, 'id');
     $query = $db->prepare("SELECT * FROM users INNER JOIN useraddresses ON "
             . "users.UserID=useraddresses.UserID WHERE users.UserID=:userid");
     $query->bindparam(":userid", $id);
@@ -20,10 +21,10 @@
 ?>
 <?php
     
-    if ($_POST) {
+    if (filter_input_array(INPUT_POST)) {
         
-        if (isset($_POST['deleteUser']) && (is_numeric($_POST['deleteUser']))) {
-        $userid = $_GET['id'];
+        if ((null !== filter_input(INPUT_POST, 'deleteUser')) && (is_numeric(filter_input(INPUT_POST, 'deleteUser')))) {
+        $userid = filter_input(INPUT_GET, 'id');
         try {
             $db->beginTransaction();
             $statement = $db->prepare("DELETE FROM Users WHERE "
@@ -40,10 +41,10 @@
         }
 
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $name = $_POST['Name'];
-        $address1 = $_POST['Address1'];
-        $address2 = $_POST['Address2'];
-        $id = $_GET['id'];
+        $name = filter_input(INPUT_POST, 'Name');
+        $address1 = filter_input(INPUT_POST, 'Address1');
+        $address2 = filter_input(INPUT_POST, 'Address2');
+        $id = filter_input(INPUT_GET, 'id');
         try {
             $db->beginTransaction();
             $statement = $db->prepare("UPDATE Users, useraddresses SET "

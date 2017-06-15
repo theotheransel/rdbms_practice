@@ -1,10 +1,11 @@
 <?php 
     include('includes/database.php');
-    if ($_POST) {
+    if (filter_input_array(INPUT_POST)) {
+        $db->begintransaction();
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $name = $_POST['Name'];
-        $address1 = $_POST['Address1'];
-        $address2 = $_POST['Address2'];
+        $name = filter_input(INPUT_POST, 'Name');
+        $address1 = filter_input(INPUT_POST, 'Address1');
+        $address2 = filter_input(INPUT_POST, 'Address2');
         $statement = $db->prepare("INSERT INTO Users (Name) "
                 . "VALUES (:name)");
         $statement->bindParam(":name", $name);
@@ -29,7 +30,6 @@
             $statement->bindParam(":address1", $address1);
             $statement->bindParam(":address2", $address2);
             $statement->execute();
-
             $db->commit();
             
         } catch (PDOException $ex) {

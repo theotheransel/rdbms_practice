@@ -42,8 +42,8 @@
 
       <div class="row marketing">
         <div class="col-lg-12">
-		<?php if(isset($_GET['msg'])){
-			echo '<div class="msg">'.$_GET['msg'].'</div>';
+		<?php if(null !== (filter_input(INPUT_GET, 'msg'))){
+			echo '<div class="msg">'.filter_input(INPUT_GET, 'msg').'</div>';
 		}
 		?>
           <h2>Customers</h2>
